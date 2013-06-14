@@ -45,4 +45,4 @@ for thrd in threads:
 dt_end=time.time();
 diff=dt_end-dt_begin
 %>
-<%="Время запроса="+diff%>
+<%="Время запроса="+str(diff)%>
