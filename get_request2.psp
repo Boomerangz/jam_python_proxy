@@ -1,6 +1,7 @@
 <%import  httplib 
 import time
 import threading
+import json
 
 basic_address="/v2/venues/search"
 ll="near=Almaty"
@@ -29,7 +30,7 @@ def getDataForCategory(cat_str):
 	conn.request("GET", basic_address+"?"+ll+"&categoryId="+cat_str+"&"+version_string+"&"+client_string)
 	r1 = conn.getresponse()
 	data1 = r1.read()
-	print(data1)
+	json.loads(data1)
 	conn.close()
 
 category_range=(FSQ_TYPE_CINEMA,FSQ_TYPE_THEATER,FSQ_TYPE_CLUB,FSQ_TYPE_MARKET,FSQ_UNDEFINED);
