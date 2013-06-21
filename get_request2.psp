@@ -54,6 +54,9 @@ for cat_str in category_range:
 for thrd in threads:
 	thrd.join()
 dt_end=time.time();
-diff=dt_end-dt_begin%>
-<%=output%>
-<%=diff%>
+diff=dt_end-dt_begi
+%>
+<%=output
+%>
+<%=diff
+%>
