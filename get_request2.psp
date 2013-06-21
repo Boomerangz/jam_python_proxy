@@ -55,9 +55,6 @@ for thrd in threads:
 	thrd.join()
 dt_end=time.time();
 diff=dt_end-dt_begin
-output=output.decode('cp1251')
+output=output.encode('utf-8','ignore').decode('utf-8')
 %>
-<%=output
-%>
-<%=diff
-%>
+<%=output%>
