@@ -24,7 +24,7 @@ TYPES_ARRAY = [FSQ_TYPE_CINEMA];
 
 dt_begin=time.time();
 
-output=''
+output=[]
 
 def getDataForCategory(cat_str):
 	global output
@@ -41,7 +41,7 @@ def getDataForCategory(cat_str):
 	venues=response['venues']
 	for place in venues:
 		place_name=place['name']
-		output=output+place_name+'<br>'
+		output.add(place_name)
 	conn.close()
 
 category_range=[FSQ_TYPE_CINEMA,FSQ_TYPE_THEATER,FSQ_TYPE_CLUB,FSQ_TYPE_MARKET,FSQ_UNDEFINED];
@@ -56,6 +56,6 @@ for thrd in threads:
 	thrd.join()
 dt_end=time.time();
 diff=dt_end-dt_begin
-output= output.encode('unicode_escape').encode('ascii')
+output= json.dumps(output)
 %>
 <%=output%>
