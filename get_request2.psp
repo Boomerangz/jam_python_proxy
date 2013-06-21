@@ -2,6 +2,7 @@
 import time
 import threading
 import json
+import codecs
 
 basic_address="/v2/venues/search"
 ll="near=Almaty"
@@ -55,6 +56,6 @@ for thrd in threads:
 	thrd.join()
 dt_end=time.time();
 diff=dt_end-dt_begin
-output=output.encode('utf-8','ignore').decode('utf-8')
+output= output.encode('unicode_escape').encode('ascii')
 %>
-<%=output.encode('utf-8','ignore').decode('utf-8')%>
+<%=output%>
