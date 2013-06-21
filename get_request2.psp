@@ -26,8 +26,13 @@ dt_begin=time.time();
 output=''
 
 def getDataForCategory(cat_str):
+	global output
 	conn = httplib.HTTPSConnection("api.foursquare.com")
-	conn.request("GET", basic_address+"?"+ll+"&categoryId="+cat_str+"&"+version_string+"&"+client_string)
+	url=basic_address+"?"+ll;
+	if (cat_str!=FSQ_UNDEFINED):
+		url+="&categoryId="+cat_str
+	url+="&"+version_string+"&"+client_string	
+	conn.request("GET", url)
 	r1 = conn.getresponse()
 	data1 = r1.read()
 	decoded=json.loads(data1)
@@ -35,7 +40,7 @@ def getDataForCategory(cat_str):
 	venues=response['venues']
 	for place in venues:
 		place_name=place['name']
-		output+=place_name+'<br>'
+		output=output+place_name+'<br>'
 	conn.close()
 
 category_range=[FSQ_TYPE_CINEMA,FSQ_TYPE_THEATER,FSQ_TYPE_CLUB,FSQ_TYPE_MARKET,FSQ_UNDEFINED];
@@ -49,6 +54,6 @@ for cat_str in category_range:
 for thrd in threads:
 	thrd.join()
 dt_end=time.time();
-diff=dt_end-dt_begin
-%>
-<%=output>
+diff=dt_end-dt_begin%>
+<%=output%>
+<%=diff%>
