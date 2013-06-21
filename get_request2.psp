@@ -1,4 +1,4 @@
-import  httplib 
+<%import  httplib 
 import time
 import threading
 import json
@@ -50,3 +50,4 @@ for thrd in threads:
 dt_end=time.time();
 diff=dt_end-dt_begin
 print diff
+%>
