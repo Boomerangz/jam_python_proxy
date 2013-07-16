@@ -5,8 +5,7 @@ import json
 import codecs
 
 basic_address="/v2/venues/search"
-location=req.form.getfirst('location')
-ll="near="+location
+ll="near=Almaty"
 category="categoryId=4bf58dd8d48988d17f941735"
 version_string="v=20120522"
 client_string="client_id=ATCDKP1BI3F1YDPOHVOWI2UCEXIUFWGPR0GF3DOVSLJFRFBM&client_secret=YADGMVO5M5QJTZXXIDEIIDOYTRS5KLI5QHUQKB5DZ22ADROO"
