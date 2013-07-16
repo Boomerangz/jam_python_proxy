@@ -57,6 +57,7 @@ for thrd in threads:
 	thrd.join()
 dt_end=time.time();
 diff=dt_end-dt_begin
+output= {'places':output,'latency':diff}
 output= json.dumps(output)
 %>
 <%=output%>
