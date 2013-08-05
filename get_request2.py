@@ -1,13 +1,14 @@
-<%import  httplib 
+import  httplib 
 import time
 import threading
 import json
 import codecs
+import jam_places
 
 basic_address="/v2/venues/search"
 ll="near=Almaty"
 category="categoryId=4bf58dd8d48988d17f941735"
-version_string="v=20120522"
+version_string="v=20130805"
 client_string="client_id=ATCDKP1BI3F1YDPOHVOWI2UCEXIUFWGPR0GF3DOVSLJFRFBM&client_secret=YADGMVO5M5QJTZXXIDEIIDOYTRS5KLI5QHUQKB5DZ22ADROO"
 
 
@@ -39,12 +40,12 @@ def getDataForCategory(cat_str):
 	decoded=json.loads(data1)
 	response=decoded['response']
 	venues=response['venues']
-	for place in venues:
-		place_name=place['name']
+	for venue in venues:
+		place_name=jam_places.getPlaces(cat_str,venue)
 		output.append(place_name)
 	conn.close()
 
-category_range=[FSQ_TYPE_CINEMA,FSQ_TYPE_THEATER,FSQ_TYPE_CLUB,FSQ_TYPE_MARKET,FSQ_UNDEFINED];
+category_range=[FSQ_TYPE_CINEMA]#,FSQ_TYPE_THEATER,FSQ_TYPE_CLUB,FSQ_TYPE_MARKET,FSQ_UNDEFINED];
 threads=[]
 for cat_str in category_range:
 	thrd=threading.Thread(target=lambda:getDataForCategory(cat_str))
@@ -57,5 +58,4 @@ for thrd in threads:
 dt_end=time.time();
 diff=dt_end-dt_begin
 output= json.dumps(output)
-%>
-<%=output%>
+print output
