@@ -45,7 +45,7 @@ def getDataForCategory(cat_str):
 		output.append(place_name)
 	conn.close()
 
-category_range=[FSQ_TYPE_CINEMA]#,FSQ_TYPE_THEATER,FSQ_TYPE_CLUB,FSQ_TYPE_MARKET,FSQ_UNDEFINED];
+category_range=[FSQ_TYPE_CINEMA];
 threads=[]
 for cat_str in category_range:
 	thrd=threading.Thread(target=lambda:getDataForCategory(cat_str))
