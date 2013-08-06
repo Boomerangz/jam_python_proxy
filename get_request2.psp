@@ -84,8 +84,8 @@ def getExtraInfo(place_id):
 	cursor.execute(sql)
 	data =  cursor.fetchall()
 	data1=""
-	if len(data)>0
-		data1=data[0][0]
+	for row in data:
+		data1=row[0]
 	if data1!="":
 		client_string="client_id=ATCDKP1BI3F1YDPOHVOWI2UCEXIUFWGPR0GF3DOVSLJFRFBM&client_secret=YADGMVO5M5QJTZXXIDEIIDOYTRS5KLI5QHUQKB5DZ22ADROO"
 		conn = httplib.HTTPSConnection("api.foursquare.com")
