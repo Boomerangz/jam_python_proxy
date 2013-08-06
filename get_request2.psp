@@ -86,7 +86,7 @@ def getExtraInfo(place_id):
 	data1=""
 	for row in data:
 		data1=row[0]
-	if data1!="":
+	if data1=="":
 		client_string="client_id=ATCDKP1BI3F1YDPOHVOWI2UCEXIUFWGPR0GF3DOVSLJFRFBM&client_secret=YADGMVO5M5QJTZXXIDEIIDOYTRS5KLI5QHUQKB5DZ22ADROO"
 		conn = httplib.HTTPSConnection("api.foursquare.com")
 		url="/v2/venues/"+place_id+"?"+client_string;
