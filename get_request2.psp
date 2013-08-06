@@ -4,7 +4,7 @@ import threading
 import json
 import codecs
 from mod_python import apache
-jam_places = apache.import_module("jam_places")
+jam_places = apache.import_module("jam_places.py")
 basic_address="/v2/venues/search"
 ll="near=Almaty"
 category="categoryId=4bf58dd8d48988d17f941735"
