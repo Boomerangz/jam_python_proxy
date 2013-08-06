@@ -94,6 +94,7 @@ def getExtraInfo(place_id):
 		r1 = conn.getresponse()
 		data1 = r1.read()
 		conn.close()
+		cursor.execute("insert into places (place_id,place_json) values ('"+place_id+"','"+data1+"');")
 	decoded=json.loads(data1)
 	return decoded['response']['venue']	
 
