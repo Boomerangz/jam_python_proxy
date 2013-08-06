@@ -81,7 +81,7 @@ def getExtraInfo(place_id):
 # формируем курсор, с помощью которого можно исполнять SQL-запросы
 	cursor = db.cursor()
 	sql = "select place_json from places where place_id="+str(place_id)+" limit 1"
-    cursor.execute(sql)
+	cursor.execute(sql)
 	data =  cursor.fetchall()
 	data1=""
 	if len(data)>0
