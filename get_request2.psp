@@ -84,17 +84,14 @@ def getExtraInfo(place_id):
 	cursor.execute(sql)
 	data =  cursor.fetchall()
 	data1=""
-	for row in data:
-		data1=row[0]
-	if data1==data1:
-		client_string="client_id=ATCDKP1BI3F1YDPOHVOWI2UCEXIUFWGPR0GF3DOVSLJFRFBM&client_secret=YADGMVO5M5QJTZXXIDEIIDOYTRS5KLI5QHUQKB5DZ22ADROO"
-		conn = httplib.HTTPSConnection("api.foursquare.com")
-		url="/v2/venues/"+place_id+"?"+client_string;
-		conn.request("GET", url)
-		r1 = conn.getresponse()
-		data1 = r1.read()
-		conn.close()
-		cursor.execute("insert into places (place_id,place_json) values ('"+place_id+"','"+data1+"');")
+	client_string="client_id=ATCDKP1BI3F1YDPOHVOWI2UCEXIUFWGPR0GF3DOVSLJFRFBM&client_secret=YADGMVO5M5QJTZXXIDEIIDOYTRS5KLI5QHUQKB5DZ22ADROO"
+	conn = httplib.HTTPSConnection("api.foursquare.com")
+	url="/v2/venues/"+place_id+"?"+client_string;
+	conn.request("GET", url)
+	r1 = conn.getresponse()
+	data1 = r1.read()
+	conn.close()
+	cursor.execute("insert into places (place_id,place_json) values ('"+place_id+"','"+data1+"');")
 	decoded=json.loads(data1)
 	return decoded['response']['venue']	
 
