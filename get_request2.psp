@@ -6,7 +6,6 @@ import codecs
 import MySQLdb
 
 basic_address="/v2/venues/search"
-ll="near=Almaty"
 category="categoryId=4bf58dd8d48988d17f941735"
 version_string="v=20130805"
 client_string="client_id=ATCDKP1BI3F1YDPOHVOWI2UCEXIUFWGPR0GF3DOVSLJFRFBM&client_secret=YADGMVO5M5QJTZXXIDEIIDOYTRS5KLI5QHUQKB5DZ22ADROO"
@@ -21,11 +20,14 @@ FSQ_TYPE_THEATER = "4bf58dd8d48988d137941735";
 FSQ_TYPE_COFFEE = "4d4b7105d754a06374d81259";
 FSQ_TYPE_BAR = "4d4b7105d754a06376d81259";
 FSQ_UNDEFINED = "??????????1";
-TYPES_ARRAY = [FSQ_TYPE_CINEMA];
+TYPES_ARRAY = [FSQ_TYPE_CINEMA,FSQ_TYPE_CLUB,FSQ_TYPE_HOTEL,FSQ_TYPE_FOOD,FSQ_TYPE_MARKET,FSQ_TYPE_THEATER,FSQ_TYPE_COFFEE,FSQ_TYPE_BAR];# [FSQ_TYPE_CINEMA];
 
 dt_begin=time.time();
 
 output=[]
+
+location = form.getfirst("location")
+ll="near="+location
 
 def getDataForCategory(cat_str):
 	global output
@@ -103,7 +105,7 @@ def getExtraInfo(place_id):
 
 category_range=[FSQ_TYPE_CINEMA];
 threads=[]
-for cat_str in category_range:
+for cat_str in TYPES_ARRAY:
 	thrd=threading.Thread(target=lambda:getDataForCategory(cat_str))
 	threads.append(thrd)
 	thrd.daemon = True
@@ -113,6 +115,7 @@ for thrd in threads:
 	thrd.join()
 dt_end=time.time();
 diff=dt_end-dt_begin
+output={'location':location,'places':output,'events':[],'films':[],'my_recommendations':[]}
 output= json.dumps(output)
 %>
 <%=output%>
