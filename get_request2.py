@@ -1,4 +1,4 @@
-import  httplib 
+import  httplib,urllib 
 import time
 import threading
 import json
@@ -101,15 +101,17 @@ def getExtraInfo(place_id):
 	decoded=json.loads(data1)
 	return decoded['response']['venue']	
 
-def getEvents():
-	params = urllib.urlencode({'key': 'YADGMVO5M5QJTZXXIDEIIDOYTRS5KLI5QHUQKB5DZ22ADROO', 'rubr_id': 0, 'date_start': '2013-08-06', 'date_start': '2013-08-12'})
+def getEvents(rubr_id):
+	params = urllib.urlencode({'key': 'YADGMVO5M5QJTZXXIDEIIDOYTRS5KLI5QHUQKB5DZ22ADROO', 'rubr_id':rubr_id, 'date_start': '2013-08-06', 'date_start': '2013-08-12'})
 	headers = {"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}
-	conn = httplib.HTTPConnection("www.jam.kz/api/foursquare/event_all")
-	conn.request("POST", "/cgi-bin/query", params, headers)
+	conn = httplib.HTTPConnection("www.jam.kz")
+	conn.request("POST", "/api/foursquare/event_all", params, headers)
 	response = conn.getresponse()
 	data = response.read()
 	conn.close()
 	return json.loads(data)
+
+
 
 category_range=[FSQ_TYPE_CINEMA];
 threads=[]
@@ -123,6 +125,6 @@ for thrd in threads:
 	thrd.join()
 dt_end=time.time();
 diff=dt_end-dt_begin
-output={'location':location,'places':output,'events':getEvents(),'films':[],'my_recommendations':[]}
+output={'places':output,'events':getEvents(0),'films':getEvents(2),'my_recommendations':[]}
 output= json.dumps(output)
 print output
