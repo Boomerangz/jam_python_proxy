@@ -101,9 +101,19 @@ def getExtraInfo(place_id):
 	decoded=json.loads(data1)
 	return decoded['response']['venue']	
 
+def getEvents():
+	params = urllib.urlencode({'key': 'YADGMVO5M5QJTZXXIDEIIDOYTRS5KLI5QHUQKB5DZ22ADROO', 'rubr_id': 0, 'date_start': '2013-08-06', 'date_start': '2013-08-12'})
+	headers = {"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}
+	conn = httplib.HTTPConnection("www.jam.kz/api/foursquare/event_all")
+	conn.request("POST", "/cgi-bin/query", params, headers)
+	response = conn.getresponse()
+	data = response.read()
+	conn.close()
+	return json.loads(data)
+
 category_range=[FSQ_TYPE_CINEMA];
 threads=[]
-for cat_str in category_range:
+for cat_str in TYPES_ARRAY:
 	thrd=threading.Thread(target=lambda:getDataForCategory(cat_str))
 	threads.append(thrd)
 	thrd.daemon = True
@@ -113,5 +123,6 @@ for thrd in threads:
 	thrd.join()
 dt_end=time.time();
 diff=dt_end-dt_begin
+output={'location':location,'places':output,'events':getEvents(),'films':[],'my_recommendations':[]}
 output= json.dumps(output)
 print output
