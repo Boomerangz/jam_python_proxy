@@ -109,8 +109,14 @@ def getEvents(rubr_id):
 	response = conn.getresponse()
 	data = response.read()
 	conn.close()
-	return json.loads(data)
+	json_event_list=json.loads(data)
+	simple_event_list=[]
+	for json_event in json_event_list:
+		event=parseEvent(json_event)
+		simple_event_list.append(event)
+	return simple_event_list
 
+def parseEvent(json_event):
 
 
 category_range=[FSQ_TYPE_CINEMA];

@@ -51,62 +51,6 @@ def getDataForCategory(cat_str):
 		output.append(place_name)
 	conn.close()
 
-def getPlaces(category,json_dictionary):
-	place_dictionary={}
-	place_dictionary['name']=json_dictionary['name']
-	place_dictionary['id']=json_dictionary['id']
-	location=json_dictionary['location']
-	place_dictionary['latitude']=location['lat']
-	place_dictionary['longitude']=location['lng']
-	if 'address' in location:
-		place_dictionary['address']=location['address']
-	place_dictionary['here_now']=json_dictionary['hereNow']['count']
-	place_dictionary['category_string']=json_dictionary['categories'][0]['shortName']
-	place_dictionary['category']=category
-	extra_place=getExtraInfo(place_dictionary['id'])
-	if 'rating' in extra_place:
-		place_dictionary['rating']=extra_place['rating']
-	else:
-		place_dictionary['rating']=6;
-	photo_groups=extra_place['photos']['groups']
-	for group in photo_groups:
-		for item in group['items']:
-			image_url=0
-			sizes=item['sizes']
-			if sizes['count']>1:
-				image_url=sizes['items'][1]['url']
-			else:
-				image_url=sizes['items'][0]['url']
-			place_dictionary['photo']=image_url	
-
-	return place_dictionary
-
-
-def getExtraInfo(place_id):
-	db = MySQLdb.connect(host="localhost", user="root", passwd="athena", db="testdb", charset='utf8')
-	cursor = db.cursor()
-	sql = "select place_json from places where place_id='"+str(place_id)+"' limit 1"
-	cursor.execute(sql)
-	data =  cursor.fetchall()
-	data1=""
-	for row in data:
-		data1=row[0]
-		data1=data1.decode('unicode-escape').encode('utf8')
-	if data1=="":
-		client_string="client_id=ATCDKP1BI3F1YDPOHVOWI2UCEXIUFWGPR0GF3DOVSLJFRFBM&client_secret=YADGMVO5M5QJTZXXIDEIIDOYTRS5KLI5QHUQKB5DZ22ADROO"
-		conn = httplib.HTTPSConnection("api.foursquare.com")
-		url="/v2/venues/"+place_id+"?"+client_string;
-		conn.request("GET", url)
-		r1 = conn.getresponse()
-		data1 = r1.read()
-		cursor.execute("INSERT INTO places (place_id,place_json) values (%s,%s)",(place_id,data1.decode('utf8').encode('unicode-escape')))
-		db.commit()
-		conn.close()
-#		cursor.execute("insert into places (place_id,place_json) values ('"+place_id+"','"+data1.decode('utf8').encode('unicode-escape')+"');")
-		#print data1.encode('unicode-escape')
-	decoded=json.loads(data1)
-	return decoded['response']['venue']	
-
 def getEvents(rubr_id):
 #	params = urllib.urlencode({'key': 'YADGMVO5M5QJTZXXIDEIIDOYTRS5KLI5QHUQKB5DZ22ADROO', 'rubr_id':'0', 'date_start': '2013-08-06', 'date_start': '2013-08-12'})
 	if rubr_id==2:
@@ -124,7 +68,7 @@ def getEvents(rubr_id):
 category_range=[FSQ_TYPE_CINEMA];
 threads=[]
 for cat_str in category_range:
-	thrd=threading.Thread(target=lambda:getDataForCategory(cat_str))
+	thrd=threading.Thread(target=lambda:jam_places.getDataForCategory(cat_str))
 	threads.append(thrd)
 	thrd.daemon = True
 	thrd.start()

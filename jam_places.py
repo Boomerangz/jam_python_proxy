@@ -1,7 +1,8 @@
 import json
 import  httplib
+import MySQLdb
 
-def getPlaces(category,json_dictionary):
+ef getPlaces(category,json_dictionary):
 	place_dictionary={}
 	place_dictionary['name']=json_dictionary['name']
 	place_dictionary['id']=json_dictionary['id']
@@ -33,12 +34,26 @@ def getPlaces(category,json_dictionary):
 
 
 def getExtraInfo(place_id):
-	client_string="client_id=ATCDKP1BI3F1YDPOHVOWI2UCEXIUFWGPR0GF3DOVSLJFRFBM&client_secret=YADGMVO5M5QJTZXXIDEIIDOYTRS5KLI5QHUQKB5DZ22ADROO"
-	conn = httplib.HTTPSConnection("api.foursquare.com")
-	url="/v2/venues/"+place_id+"?"+client_string;
-	conn.request("GET", url)
-	r1 = conn.getresponse()
-	data1 = r1.read()
+	db = MySQLdb.connect(host="localhost", user="root", passwd="athena", db="testdb", charset='utf8')
+	cursor = db.cursor()
+	sql = "select place_json from places where place_id='"+str(place_id)+"' limit 1"
+	cursor.execute(sql)
+	data =  cursor.fetchall()
+	data1=""
+	for row in data:
+		data1=row[0]
+		data1=data1.decode('unicode-escape').encode('utf8')
+	if data1=="":
+		client_string="client_id=ATCDKP1BI3F1YDPOHVOWI2UCEXIUFWGPR0GF3DOVSLJFRFBM&client_secret=YADGMVO5M5QJTZXXIDEIIDOYTRS5KLI5QHUQKB5DZ22ADROO"
+		conn = httplib.HTTPSConnection("api.foursquare.com")
+		url="/v2/venues/"+place_id+"?"+client_string;
+		conn.request("GET", url)
+		r1 = conn.getresponse()
+		data1 = r1.read()
+		cursor.execute("INSERT INTO places (place_id,place_json) values (%s,%s)",(place_id,data1.decode('utf8').encode('unicode-escape')))
+		db.commit()
+		conn.close()
+#		cursor.execute("insert into places (place_id,place_json) values ('"+place_id+"','"+data1.decode('utf8').encode('unicode-escape')+"');")
+		#print data1.encode('unicode-escape')
 	decoded=json.loads(data1)
-	conn.close()
-	return decoded['response']['venue']
+	return decoded['response']['venue']	
