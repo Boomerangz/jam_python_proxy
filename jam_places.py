@@ -16,7 +16,7 @@ def getPlaces(category,json_dictionary):
 	extra_place=getExtraInfo(place_dictionary['id'])
 	if 'rating' in extra_place:
 		place_dictionary['rating']=extra_place['rating']
-	else
+	else:
 		place_dictionary['rating']=6;
 	photo_groups=extra_place['photos']['groups']
 	for group in photo_groups:
