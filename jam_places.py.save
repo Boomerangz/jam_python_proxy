@@ -57,3 +57,5 @@ def getExtraInfo(place_id):
 		#print data1.encode('unicode-escape')
 	decoded=json.loads(data1)
 	return decoded['response']['venue']	
+
+

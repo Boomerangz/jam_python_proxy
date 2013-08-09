@@ -1,5 +1,6 @@
 <%import  httplib,urllib 
 import time
+import datetime
 import threading
 import json
 import codecs
@@ -8,6 +9,8 @@ import MySQLdb
 from mod_python import apache
 here = os.path.dirname('/var/www/proxy/')
 path = os.path.join(here, 'jam_places.py')
+key="YADGMVO5M5QJTZXXIDEIIDOYTRS5KLI5QHUQKB5DZ22ADROO"
+user_key=form.getfirst("key")	
 jam_places= apache.import_module(path)
 basic_address="/v2/venues/search"
 category="categoryId=4bf58dd8d48988d17f941735"
@@ -30,6 +33,7 @@ dt_begin=time.time();
 
 output=[]
 
+
 location = form.getfirst("location")
 ll="near="+location
 
@@ -47,16 +51,20 @@ def getDataForCategory(cat_str):
 	response=decoded['response']
 	venues=response['venues']
 	for venue in venues:
-		place_name=getPlaces(cat_str,venue)
+		place_name=jam_places.getPlaces(cat_str,venue)
 		output.append(place_name)
 	conn.close()
 
 def getEvents(rubr_id):
 #	params = urllib.urlencode({'key': 'YADGMVO5M5QJTZXXIDEIIDOYTRS5KLI5QHUQKB5DZ22ADROO', 'rubr_id':'0', 'date_start': '2013-08-06', 'date_start': '2013-08-12'})
+	date1=datetime.date.today()
+	date2=date1+datetime.timedelta(days=+7)
+	date1=str(date1)
+	date2=str(date2)
 	if rubr_id==2:
 		params = urllib.urlencode({'key': 'YADGMVO5M5QJTZXXIDEIIDOYTRS5KLI5QHUQKB5DZ22ADROO', 'rubr_id':rubr_id})
 	else:
-		params = urllib.urlencode({'key': 'YADGMVO5M5QJTZXXIDEIIDOYTRS5KLI5QHUQKB5DZ22ADROO', 'rubr_id':rubr_id, 'date_start': '2013-08-06', 'date_start': '2013-08-12'})
+		params = urllib.urlencode({'key': 'YADGMVO5M5QJTZXXIDEIIDOYTRS5KLI5QHUQKB5DZ22ADROO', 'rubr_id':rubr_id, 'date_start':date1, 'date_start': date2})
 	headers = {"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}
 	conn = httplib.HTTPConnection("www.jam.kz")
 	conn.request("POST", "/api/foursquare/event_all", params, headers)
@@ -68,7 +76,7 @@ def getEvents(rubr_id):
 category_range=[FSQ_TYPE_CINEMA];
 threads=[]
 for cat_str in category_range:
-	thrd=threading.Thread(target=lambda:jam_places.getDataForCategory(cat_str))
+	thrd=threading.Thread(target=lambda:getDataForCategory(cat_str))
 	threads.append(thrd)
 	thrd.daemon = True
 	thrd.start()

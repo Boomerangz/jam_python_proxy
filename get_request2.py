@@ -117,9 +117,8 @@ def getEvents(rubr_id):
 	return simple_event_list
 
 def parseEvent(json_event):
+	return json_event	
 
-
-category_range=[FSQ_TYPE_CINEMA];
 threads=[]
 for cat_str in TYPES_ARRAY:
 	thrd=threading.Thread(target=lambda:getDataForCategory(cat_str))
