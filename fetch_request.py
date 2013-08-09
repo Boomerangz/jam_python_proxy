@@ -5,7 +5,7 @@ import threading
 import json
 import codecs
 import MySQLdb
-
+import jam_places
 
 
 def fetchRequest(location):
@@ -30,15 +30,13 @@ def fetchRequest(location):
 	category_range=[FSQ_TYPE_CINEMA];
 	threads=[]
 	for cat_str in category_range:
-		thrd=threading.Thread(target=lambda:getDataForCategory(cat_str))
+		thrd=threading.Thread(target=lambda:output.extend(jam_places.getDataForCategory(cat_str,location)))
 		threads.append(thrd)
 		thrd.daemon = True
 		thrd.start()
 
 	for thrd in threads:
 		thrd.join()
-	dt_end=time.time();
-	diff=dt_end-dt_begin
 	output={'location':location,'places':output,'events':getEvents(0),'films':getEvents(2),'my_recommendations':[]}
 	output= json.dumps(output)
 	return output;
@@ -61,3 +59,4 @@ def getEvents(rubr_id):
 	data = response.read()
 	conn.close()
 	return json.loads(data)
+

@@ -1,4 +1,4 @@
 import  fetch_request
 
-output=fetchRequest('Almaty')
+output=fetch_request.fetchRequest('Almaty')
 print output
