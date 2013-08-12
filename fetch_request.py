@@ -29,7 +29,7 @@ def fetchRequest(location):
 
 	category_range=[FSQ_TYPE_CINEMA];
 	threads=[]
-	for cat_str in category_range:
+	for cat_str in TYPES_ARRAY:
 		thrd=threading.Thread(target=lambda:output.extend(jam_places.getDataForCategory(cat_str,location)))
 		threads.append(thrd)
 		thrd.daemon = True
